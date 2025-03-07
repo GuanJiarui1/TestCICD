@@ -43,9 +43,11 @@ jobs:
           path: target/site/jacoco/
 
       - name: 打包应用（可选）
-        run: mvn package -DskipTests
+        run: mvn package -Dmaven.test.skip=true
 
       - name: CI已完成
+        run: echo "CI Pipeline 执行完毕"
+
 
       # - name: 构建 Docker 镜像（可选）
       #   if: success()
