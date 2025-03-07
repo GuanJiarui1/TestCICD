@@ -13,7 +13,6 @@ import static org.hamcrest.Matchers.equalTo;
 /**
  * 接口测试
  * 需要启动相关服务类
- *
  */
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)//让Spring Boot以随机端口启动Web服务器 而不是默认不启动Web容器
@@ -50,6 +49,18 @@ public class UserAPITest {
                 .then()
                 .statusCode(200)
                 .body(equalTo("Login success"));
+    }
+
+    @Test
+    public void testUserLogin2() {
+        given()
+                .contentType(ContentType.JSON)
+                .body("{\"username\":\"testUser\", \"password\":\"1223456\"}")
+                .when()
+                .post("/api/login")
+                .then()
+                .statusCode(401)
+                .body(equalTo("Login failed"));
     }
 }
 
