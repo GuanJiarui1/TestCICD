@@ -36,8 +36,11 @@ jobs:
       - name: 运行单元测试 & 生成 JaCoCo 覆盖率报告
         run: mvn test
 
+      - name: 检查 GitHub 访问
+        run: curl -I https://github.com  # 添加调试步骤
+
       - name: 上传 JaCoCo 覆盖率报告（可选）
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@latest  # 使用 latest 避免 v2 版本问题
         with:
           name: jacoco-report
           path: target/site/jacoco/
