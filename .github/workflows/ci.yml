@@ -36,10 +36,10 @@ jobs:
           restore-keys: maven-${{ runner.os }}
 
       - name: 编译项目
-        run: mvn -f TestCICD/pom.xml clean compile  # 指定 POM 文件路径
+        run: mvn clean compile
 
       - name: 运行单元测试 & 生成 JaCoCo 覆盖率报告
-        run: mvn -f TestCICD/pom.xml test
+        run: mvn test
 
       - name: 检查 GitHub 访问
         run: curl -I https://api.github.com/repos/actions/upload-artifact/releases/latest
@@ -51,7 +51,7 @@ jobs:
       #     path: target/site/jacoco/
 
       - name: 打包应用（可选）
-        run: mvn -f TestCICD/pom.xml package -DskipTests
+        run: mvn package -DskipTests
 
       - name: CI已完成
         run: echo "CI Pipeline 执行完毕"
