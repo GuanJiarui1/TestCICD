@@ -37,20 +37,19 @@ jobs:
         run: mvn test
 
       - name: 检查 GitHub 访问
-        run: curl -I https://github.com  # 添加调试步骤
+        run: curl -I https://api.github.com/repos/actions/upload-artifact/releases/latest
 
-      - name: 上传 JaCoCo 覆盖率报告（可选）
-        uses: actions/upload-artifact@latest  # 使用 latest 避免 v2 版本问题
-        with:
-          name: jacoco-report
-          path: target/site/jacoco/
+      # - name: 上传 JaCoCo 覆盖率报告（可选）
+      #   uses: actions/upload-artifact@v3  # 确保明确版本
+      #   with:
+      #     name: jacoco-report
+      #     path: target/site/jacoco/
 
       - name: 打包应用（可选）
-        run: mvn package -Dmaven.test.skip=true
+        run: mvn package -DskipTests
 
       - name: CI已完成
         run: echo "CI Pipeline 执行完毕"
-
 
       # - name: 构建 Docker 镜像（可选）
       #   if: success()
