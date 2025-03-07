@@ -15,6 +15,11 @@ jobs:
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 确保拉取完整仓库
+
+      - name: 确认项目结构
+        run: ls -R  # 列出所有文件，确保 pom.xml 存在
 
       - name: 设置 JDK 8
         uses: actions/setup-java@v3
@@ -31,21 +36,25 @@ jobs:
           restore-keys: maven-${{ runner.os }}
 
       - name: 编译项目
-        run: mvn clean compile
+        run: mvn -f TestCICD/pom.xml clean compile  # 指定 POM 文件路径
 
       - name: 运行单元测试 & 生成 JaCoCo 覆盖率报告
-        run: mvn test
+        run: mvn -f TestCICD/pom.xml test
 
-      - name: 上传 JaCoCo 覆盖率报告（可选）
-        uses: actions/upload-artifact@v3
-        with:
-          name: jacoco-report
-          path: target/site/jacoco/
+      - name: 检查 GitHub 访问
+        run: curl -I https://api.github.com/repos/actions/upload-artifact/releases/latest
+
+      # - name: 上传 JaCoCo 覆盖率报告（可选）
+      #   uses: actions/upload-artifact@v3  # 确保明确版本
+      #   with:
+      #     name: jacoco-report
+      #     path: target/site/jacoco/
 
       - name: 打包应用（可选）
-        run: mvn package -DskipTests
+        run: mvn -f TestCICD/pom.xml package -DskipTests
 
       - name: CI已完成
+        run: echo "CI Pipeline 执行完毕"
 
       # - name: 构建 Docker 镜像（可选）
       #   if: success()
